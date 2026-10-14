@@ -1,0 +1,66 @@
+{
+  "profiles": [
+    {
+      "id": "comfyui",
+      "app": "ComfyUI",
+      "name": "ComfyUI · imágenes y vídeo",
+      "description": "Entorno actual con Usgromana. Puerto 8188.",
+      "cwd": "/home/ceinpro/Desktop/ComfyUI",
+      "command": [
+        "/home/ceinpro/Desktop/comfyui-env/bin/python",
+        "main.py",
+        "--listen",
+        "0.0.0.0"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      },
+      "port": 8188,
+      "health": {
+        "url": "http://127.0.0.1:8188/",
+        "statuses": [
+          200,
+          401,
+          403
+        ]
+      },
+      "startup_timeout": 180
+    },
+    {
+      "id": "qwen3-64k",
+      "app": "vLLM",
+      "name": "Qwen3 Coder Next · 64K",
+      "description": "FP8 · contexto 65.536 · GPU 80 % · puerto 8000",
+      "cwd": "/home/ceinpro/spark-vllm-docker",
+      "command": [
+        "/home/ceinpro/spark-vllm-docker/run-recipe.sh",
+        "qwen3-coder-next-fp8",
+        "--solo",
+        "--tp",
+        "1",
+        "--port",
+        "8000",
+        "--gpu-mem",
+        "0.8",
+        "--max-model-len",
+        "65536"
+      ],
+      "env": {
+        "HF_HOME": "/home/ceinpro/hf_cache",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "port": 8000,
+      "health": {
+        "url": "http://127.0.0.1:8000/v1/models",
+        "statuses": [
+          200
+        ]
+      },
+      "containers": [
+        "vllm_node"
+      ],
+      "startup_timeout": 900,
+      "tty": true
+    }
+  ]
+}
